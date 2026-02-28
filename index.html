@@ -157,7 +157,7 @@
 <body>
 
 <div class="container">
-    <h2>Media Buying Calculate</h2>
+    <h2>Media Buying Calc</h2>
 
     <div class="grid">
         <div class="input-group">
@@ -187,6 +187,7 @@
         <div class="stat-box">
             <h3 id="limit-price">0.00</h3>
             <p>Гранична ціна</p>
+            <p>Max. допустима</p>
         </div>
         <div class="stat-box divider">
             <h3 id="current-roi">0%</h3>
@@ -262,7 +263,7 @@
         }
 
         // Таблиця цільового ROI (згідно твого скріншоту: 100%, 50%, 25%, 10%, 40%)
-        const targetRois = [100, 50, 40, 25, 10];
+        const targetRois = [100, 75, 50, 40, 30, 25, 10, 0];
         const tbody = document.getElementById('roi-table-body');
         tbody.innerHTML = '';
 
@@ -291,4 +292,3 @@
 
 </body>
 </html>
-
