@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Калькулятор вартості ліда з вибором валюти</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .calculator-card {
+            background: #ffffff;
+            padding: 25px;
+            border-radius: 16px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+            width: 340px;
+        }
+
+        h2 {
+            margin: 0 0 20px 0;
+            color: #1a1a1a;
+            font-size: 1.3rem;
+            text-align: center;
+        }
+
+        .input-group {
+            margin-bottom: 12px;
+        }
+
+        label {
+            display: block;
+            font-size: 0.85rem;
+            color: #555;
+            margin-bottom: 6px;
+            font-weight: 500;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #e1e1e1;
+            border-radius: 10px;
+            font-size: 1rem;
+            box-sizing: border-box;
+            outline: none;
+            background-color: #fafafa;
+            transition: all 0.2s;
+        }
+
+        input:focus, select:focus {
+            border-color: #007bff;
+            background-color: #fff;
+            box-shadow: 0 0 0 3px rgba(0,123,255,0.1);
+        }
+
+        .result-area {
+            margin-top: 25px;
+            padding: 20px;
+            background: linear-gradient(135deg, #e0f2ff 0%, #f0f7ff 100%);
+            border-radius: 12px;
+            text-align: center;
+            border: 1px solid #cce5ff;
+        }
+
+        .result-label {
+            font-size: 0.9rem;
+            color: #445;
+            margin-bottom: 8px;
+        }
+
+        .result-value {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: #0056b3;
+        }
+
+        #currency-symbol {
+            margin-left: 6px;
+            font-size: 1.4rem;
+            color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+
+<div class="calculator-card">
+    <h2>Калькулятор ліда</h2>
+    
+    <div class="input-group">
+        <label for="currency">Оберіть валюту:</label>
+        <select id="currency">
+            <option value="$">USD ($)</option>
+            <option value="€">EUR (€)</option>
+            <option value="₴">UAH (₴)</option>
+            <option value="zł">PLN (zł)</option>
+        </select>
+    </div>
+
+    <div class="input-group">
+        <label for="payout">Виплата за підтверджений лід:</label>
+        <input type="number" id="payout" placeholder="Введіть суму" step="0.01">
+    </div>
+
+    <div class="input-group">
+        <label for="approval">Відсоток апрува (%):</label>
+        <select id="approval"></select>
+    </div>
+
+    <div class="result-area">
+        <div class="result-label">Вартість одного ліда:</div>
+        <div class="result-value">
+            <span id="result">0.00</span><span id="currency-symbol">$</span>
+        </div>
+    </div>
+</div>
+
+<script>
+    const payoutInput = document.getElementById('payout');
+    const approvalSelect = document.getElementById('approval');
+    const currencySelect = document.getElementById('currency');
+    const resultDisplay = document.getElementById('result');
+    const symbolDisplay = document.getElementById('currency-symbol');
+
+    // Наповнюємо список відсотків (5% - 100%)
+    function fillApprovalOptions() {
+        for (let i = 5; i <= 100; i += 5) {
+            const option = document.createElement('option');
+            option.value = i;
+            option.textContent = i + '%';
+            if (i === 30) option.selected = true; // Поставимо 30% як старт
+            approvalSelect.appendChild(option);
+        }
+    }
+
+    // Головна функція розрахунку
+    function updateCalculator() {
+        // Рахуємо цифри
+        const payout = parseFloat(payoutInput.value) || 0;
+        const approval = parseFloat(approvalSelect.value) || 0;
+        const total = payout * (approval / 100);
+        
+        // Оновлюємо текст результату
+        resultDisplay.textContent = total.toLocaleString('uk-UA', {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        });
+
+        // Оновлюємо символ валюти
+        symbolDisplay.textContent = currencySelect.value;
+    }
+
+    // Слухаємо зміни у всіх полях
+    payoutInput.addEventListener('input', updateCalculator);
+    approvalSelect.addEventListener('change', updateCalculator);
+    currencySelect.addEventListener('change', updateCalculator);
+
+    // Запускаємо при старті
+    fillApprovalOptions();
+    updateCalculator();
+</script>
+
+</body>
+</html>
